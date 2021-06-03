@@ -1,7 +1,4 @@
-# This is a sample Python script.
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,34 +8,7 @@ show_figures = False  # Display the figure when the program is run
 save_figures = True  # Save the figures to the same folder as the program
 print_coefficient = True  # Enable the printing of coefficients for the filters
 
-
-def plot_bode(omega, amp, fig_num=None, title=""):
-    plt.close(fig_num)
-    bode = plt.figure(fig_num)
-    bode.suptitle(title)
-
-    # Make the subplot for the amplitude
-    plot_amplitude = bode.add_subplot(211)
-    plot_amplitude.semilogx(omega, 20 * np.log10(abs(amp)))
-    #plot_amplitude.set_xlim(0, 50)
-    #plot_amplitude.set_ylim(-100, 10)
-    # plot_amplitude.xlabel('Frequency [radians / second]')
-    plot_amplitude.set_ylabel('Amplitude [dB]')
-    plot_amplitude.margins(0, 0.1)
-    plot_amplitude.grid(which='both', axis='both')
-    #plot_amplitude.axvline(100, color='green')  # cutoff frequency
-
-    # Make the subplot for the phase response
-    phase = bode.add_subplot(212, sharex=plot_amplitude)
-    phase.semilogx(omega, np.angle(amp))
-    # phase.title('Butterworth filter frequency response')
-    phase.set_xlabel('Frequency [radians / second]')
-    phase.set_ylabel('Phase [radians]')
-    phase.margins(0, 0.1)
-    phase.grid(which='both', axis='both')
-    #phase.axvline(100, color='green')  # cutoff frequency
-    bode.show()
-
+## Func
 
 def compare2disc(analog_filter, ts=0.1, title="", fig_num=[None, None], step_time=[0, 10]):
     #ts = 1/100
@@ -74,7 +44,7 @@ def compare2disc(analog_filter, ts=0.1, title="", fig_num=[None, None], step_tim
     #w_z_zoh, h_z_zoh = sig.freqz([0.00995], [1, -0.99], fs=100, worN=5000)
     #plt.close(fig_num)
     plot_bode = plt.figure(dpi=200, figsize=(12.8, 7), num=fig_num[0])
-    plot_bode.suptitle("Bodeplot "+ title)
+    plot_bode.suptitle("Bodeplot " + title, fontsize=20)
 
     # Make the subplot for the amplitude
     plot_amplitude = plot_bode.add_subplot(211)
@@ -86,7 +56,7 @@ def compare2disc(analog_filter, ts=0.1, title="", fig_num=[None, None], step_tim
     plot_amplitude.set_xlim(0.01, 400)
     plot_amplitude.set_ylim(-80, 5)
     # plot_amplitude.xlabel('Frequency [radians / second]')
-    plot_amplitude.set_ylabel('Amplitude [dB]')
+    plot_amplitude.set_ylabel('Amplitude [dB]', fontsize=10)
     plot_amplitude.margins(0, 0.1)
     plot_amplitude.grid(which='both', axis='both')
     #plot_amplitude.axvline(100, color='green')  # cutoff frequency
@@ -100,8 +70,8 @@ def compare2disc(analog_filter, ts=0.1, title="", fig_num=[None, None], step_tim
     plot_phase.legend()
     # plot_phase.set_ylim(-np.pi, np.pi)
     # phase.title('Butterworth filter frequency response')
-    plot_phase.set_xlabel('Frequency [radians / second]')
-    plot_phase.set_ylabel('Phase [radians]')
+    plot_phase.set_xlabel('Frequency [radians / second]', fontsize=10)
+    plot_phase.set_ylabel('Phase [radians]', fontsize=10)
     plot_phase.margins(0, 0.1)
     plot_phase.grid(which='both', axis='both')
     #phase.axvline(100, color='green')  # cutoff frequency
@@ -128,11 +98,11 @@ def compare2disc(analog_filter, ts=0.1, title="", fig_num=[None, None], step_tim
     h_t_cont = sig.impulse(analog_filter, T=t)
 
     plot_step = plt.figure(dpi=200, figsize=(12.8, 7), num=fig_num[1])
-    plot_step.suptitle("Step and impulse response for " + title)
+    plot_step.suptitle("Step and impulse response for " + title, fontsize=20)
 
     # Make the subplot for the stepresponse
     ax1_step = plot_step.add_subplot(211)
-    ax1_step.set_title("Step response")
+    ax1_step.set_title("Step response", fontsize=15)
     ax1_step.plot(s_t_cont[0], s_t_cont[1], "C0", alpha=1, label=r'$ U(s)\cdot H(s) $ Continuous', linewidth=2)
     ax1_step.plot(t, s_n_tustin, "C1", alpha=1, label=r'$U(z)\cdot H(z) $ Discrete tustin', linewidth=1)
     ax1_step.plot(t, s_n_zoh, "C2", alpha=1, label=r'$ U(z)\cdot H(z)$ Discrete zoh', linewidth=1)
@@ -141,25 +111,30 @@ def compare2disc(analog_filter, ts=0.1, title="", fig_num=[None, None], step_tim
     ax1_step.legend()
     #ax1_step.set_xlim(0.01, 400)
     #ax1_step.set_ylim(-80, 5)
-    ax1_step.set_xlabel('Time [seconds]')
-    ax1_step.set_ylabel('Amplitude')
+    ax1_step.set_xlabel('Time [seconds]', fontsize=10)
+    ax1_step.set_ylabel('Amplitude', fontsize=10)
     ax1_step.margins(0, 0.1)
     ax1_step.grid(which='both', axis='both')
 
 
     # Make the subplot for the impulse response
     ax1_impulse = plot_step.add_subplot(212, sharex=ax1_step)
-    ax1_impulse.set_title("Impulse response")
-    ax1_impulse.plot(h_t_cont[0], h_t_cont[1], "C0", alpha=1, label=r'$ U(s)\cdot H(s) $ Continuous', linewidth=2)
-    ax1_impulse.plot(h_n_tustin[0], h_n_tustin[1][0], "C1", alpha=1, label=r'$U(z)\cdot H(z) $ Discrete tustin', linewidth=1)
-    ax1_impulse.plot(h_n_zoh[0], h_n_zoh[1][0], "C2", alpha=1, label=r'$ U(z)\cdot H(z)$ Discrete zoh', linewidth=1)
+    ax2_impulse = ax1_impulse.twinx()
+    ax1_impulse.set_title("Impulse response", fontsize=15)
+    p_ht, = ax1_impulse.plot(h_t_cont[0], h_t_cont[1], "C0", alpha=1,
+                             label=r'$ \delta(t)\ast h(t) $ Continuous', linewidth=2)
+    p_hn_tustin, = ax2_impulse.plot(h_n_tustin[0], h_n_tustin[1][0], "C1", alpha=1,
+                                    label=r'$\delta(n)\ast h(n) $ Discrete tustin', linewidth=1)
+    p_hn_zoh, = ax2_impulse.plot(h_n_zoh[0], h_n_zoh[1][0], "C2", alpha=1,
+                                 label=r'$ \delta(n)\ast h(n)$ Discrete zoh', linewidth=1)
 
     #ax1_impulse.axvline(1 / ts * np.pi, color='red', ls=":")  # cutoff frequency
-    ax1_impulse.legend()
+    ax1_impulse.legend([p_ht, p_hn_tustin, p_hn_zoh], [p_ht._label, p_hn_tustin._label, p_hn_zoh._label])
     #ax1_impulse.set_xlim(0.01, 400)
     #ax1_impulse.set_ylim(-80, 5)
-    ax1_impulse.set_xlabel('Time [seconds]')
-    ax1_impulse.set_ylabel('Amplitude')
+    ax1_impulse.set_xlabel('Time [seconds]', fontsize=10)
+    ax1_impulse.set_ylabel('Amplitude (Continuous)', fontsize=10)
+    ax2_impulse.set_ylabel('Amplitude (Discrete)', fontsize=10)
     ax1_impulse.margins(0, 0.1)
     ax1_impulse.grid(which='both', axis='both')
 
@@ -190,6 +165,9 @@ if __name__ == '__main__':
                                                 fig_num=[5, 6], step_time=[0, 2])
     bode_elliptic, step_elliptic = compare2disc(elliptic, ts=0.01, title="elliptic-filter",
                                                 fig_num=[7, 8], step_time=[0, 10])
+    # Legg til 2 akser på impuls respons
+    # Fikse bilde dimensjonene
+    # Legge til pi på y-akse
 
     # Display the figures if enabled
     if show_figures:
